@@ -8,6 +8,6 @@ class PexelsRepositoryImpl(
 ) : PexelsRepository {
 
     override suspend fun getImages(query: String, perPage: Int): ImageResponse {
-        return api.getImage("sea", 1)
+        return api.getImage(query, perPage)
     }
 }

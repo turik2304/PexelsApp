@@ -6,12 +6,10 @@ import com.example.pexelsapp.di.scopes.AppScope
 import dagger.Module
 import dagger.Provides
 
-class AppModule {
-    @Module
-    class AppModule(val application: Application) {
+@Module
+class AppModule(val application: Application) {
 
-        @Provides
-        @AppScope
-        fun provideContext(): Context = application
-    }
+    @Provides
+    @AppScope
+    fun provideContext(): Context = application
 }

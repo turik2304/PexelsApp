@@ -12,13 +12,13 @@ data class ImageResponse(
 }
 
 @Serializable
-class Photo(
+data class Photo(
     @SerialName("src")
     val source: Source
 )
 
 @Serializable
-class Source(
+data class Source(
     @SerialName("original")
     val link: String
 )

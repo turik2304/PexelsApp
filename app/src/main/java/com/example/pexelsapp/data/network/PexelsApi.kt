@@ -7,7 +7,7 @@ import retrofit2.http.Query
 interface PexelsApi {
 
     @GET("v1/search")
-    fun getImage(
+    suspend fun getImage(
         @Query("query") query: String,
         @Query("per_page") perPage: Int
     ): ImageResponse

@@ -8,8 +8,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PexelsViewModel(
+class PexelsViewModel @Inject constructor(
     private val getImagesUsecase: GetImagesUsecase
 ) : ViewModel() {
 

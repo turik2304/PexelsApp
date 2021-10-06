@@ -12,15 +12,23 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.pexelsapp.PexelsApp
 import com.example.pexelsapp.R
-import com.example.pexelsapp.domain.GetImagesUsecase
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class SearchFragment : Fragment() {
 
     private lateinit var button: Button
     private lateinit var imageView: ImageView
     private lateinit var editText: EditText
+
+    @Inject
+    lateinit var pexelsViewModel: PexelsViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity?.application as PexelsApp).searchComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,27 +41,23 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         button = view.findViewById(R.id.button)
         imageView = view.findViewById(R.id.imageView)
         editText = view.findViewById(R.id.editText)
 
-        val viewModel =
-            PexelsViewModel(GetImagesUsecase((activity?.application as PexelsApp).appComponent.repo()))
-
         button.setOnClickListener {
             val query = editText.text.toString()
-            viewModel.loadImage(query, 1)
+            pexelsViewModel.loadImage(query, 1)
         }
 
         lifecycleScope.launch {
-            viewModel.images
+            pexelsViewModel.images
                 .collect {
                     Glide.with(this@SearchFragment)
                         .load(it.photos?.first()?.source?.link)
                         .into(imageView)
                 }
         }
-        viewModel.loadImage("sea", 1)
+        pexelsViewModel.loadImage("sea", 1)
     }
 }

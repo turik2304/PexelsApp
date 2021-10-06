@@ -1,2 +1,2 @@
 # PexelsApp
-Training project
+Training project with coroutines, dagger, MVVM

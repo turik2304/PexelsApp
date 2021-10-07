@@ -6,12 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pexelsapp.PexelsApp
 import com.example.pexelsapp.R
+import com.example.pexelsapp.domain.model.Photo
+import com.example.pexelsapp.presentation.adapters.PhotosAdapter
+import com.example.pexelsapp.presentation.view_models.PhotoViewModel
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,11 +24,13 @@ import javax.inject.Inject
 class SearchFragment : Fragment() {
 
     private lateinit var button: Button
-    private lateinit var imageView: ImageView
     private lateinit var editText: EditText
+    private lateinit var recyclerView: RecyclerView
+
+    private lateinit var adapter: PhotosAdapter
 
     @Inject
-    lateinit var pexelsViewModel: PexelsViewModel
+    lateinit var pexelsViewModel: PhotoViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,23 +48,38 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        button = view.findViewById(R.id.button)
-        imageView = view.findViewById(R.id.imageView)
-        editText = view.findViewById(R.id.editText)
+        initViews(view)
+        initRecycler()
 
         button.setOnClickListener {
             val query = editText.text.toString()
-            pexelsViewModel.loadImage(query, 1)
+            pexelsViewModel.loadPhotos(query, 20)
         }
 
         lifecycleScope.launch {
-            pexelsViewModel.images
-                .collect {
-                    Glide.with(this@SearchFragment)
-                        .load(it.photos?.first()?.source?.link)
-                        .into(imageView)
-                }
+            pexelsViewModel.photos.collectToAdapter()
         }
-        pexelsViewModel.loadImage("sea", 1)
+
+        pexelsViewModel.loadPhotos("sea", 1)
+    }
+
+    private fun initViews(parent: View) {
+        button = parent.findViewById(R.id.button)
+        editText = parent.findViewById(R.id.editText)
+        recyclerView = parent.findViewById(R.id.recyclerView)
+    }
+
+    private fun initRecycler() {
+        adapter = PhotosAdapter(pexelsViewModel::onPhotoClick)
+        recyclerView.adapter = adapter
+        recyclerView.hasFixedSize()
+        val orientation = (recyclerView.layoutManager as LinearLayoutManager).orientation
+        recyclerView.addItemDecoration(DividerItemDecoration(context, orientation))
+    }
+
+    private suspend fun SharedFlow<List<Photo>>.collectToAdapter() {
+        this.collect {
+            adapter.submitList(it)
+        }
     }
 }

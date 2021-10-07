@@ -2,10 +2,9 @@ package com.example.pexelsapp.di.modules
 
 import androidx.lifecycle.ViewModel
 import com.example.pexelsapp.data.repository.PexelsRepository
-import com.example.pexelsapp.di.scopes.AppScope
 import com.example.pexelsapp.di.scopes.SearchScope
-import com.example.pexelsapp.domain.GetImagesUsecase
-import com.example.pexelsapp.presentation.PexelsViewModel
+import com.example.pexelsapp.domain.GetPhotosUsecase
+import com.example.pexelsapp.presentation.view_models.PhotoViewModel
 import dagger.Module
 import dagger.Provides
 
@@ -14,11 +13,11 @@ class SearchModule {
 
     @Provides
     @SearchScope
-    fun provideGetImagesUsecase(repository: PexelsRepository): GetImagesUsecase =
-        GetImagesUsecase(repository)
+    fun provideGetPhotosUsecase(repository: PexelsRepository): GetPhotosUsecase =
+        GetPhotosUsecase(repository)
 
     @Provides
     @SearchScope
-    fun provideSearchViewModel(getImagesUsecase: GetImagesUsecase): ViewModel =
-        PexelsViewModel(getImagesUsecase)
+    fun provideSearchViewModel(getPhotosUsecase: GetPhotosUsecase): ViewModel =
+        PhotoViewModel(getPhotosUsecase)
 }

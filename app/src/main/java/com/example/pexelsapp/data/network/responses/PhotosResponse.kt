@@ -21,7 +21,7 @@ data class PhotoRemote(
 
 @Serializable
 data class Source(
-    @SerialName("medium")
+    @SerialName("large")
     val url: String
 )
 

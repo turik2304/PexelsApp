@@ -1,4 +1,4 @@
-package com.example.pexelsapp.presentation.view_models
+package com.example.pexelsapp.presentation.screens.search_photo
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-class PhotoViewModel @Inject constructor(
+class SearchViewModel @Inject constructor(
     private val getPhotosUsecase: GetPhotosUsecase
 ) : ViewModel() {
 

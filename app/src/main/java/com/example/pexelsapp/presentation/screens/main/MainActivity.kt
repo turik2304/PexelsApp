@@ -1,8 +1,9 @@
-package com.example.pexelsapp.presentation
+package com.example.pexelsapp.presentation.screens.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pexelsapp.R
+import com.example.pexelsapp.presentation.screens.search_photo.SearchFragment
 
 class MainActivity : AppCompatActivity() {
 

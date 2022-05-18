@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlinx-serialization'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -57,7 +58,7 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$glide"
     implementation "com.github.bumptech.glide:glide:$glide"
 
-    def dagger = '2.39.1'
-    kapt "com.google.dagger:dagger-compiler:$dagger"
-    implementation "com.google.dagger:dagger:$dagger"
+    def hilt = '2.39.1'
+    kapt "com.google.dagger:hilt-compiler:$hilt"
+    implementation "com.google.dagger:hilt-android:$hilt"
 }

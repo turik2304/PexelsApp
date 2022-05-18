@@ -1,4 +1,4 @@
-package com.example.pexelsapp.presentation
+package com.example.pexelsapp.presentation.screens.search_photo
 
 import android.os.Bundle
 import android.text.Editable
@@ -16,7 +16,6 @@ import com.example.pexelsapp.PexelsApp
 import com.example.pexelsapp.R
 import com.example.pexelsapp.presentation.adapters.PhotosAdapter
 import com.example.pexelsapp.presentation.model.PhotoUI
-import com.example.pexelsapp.presentation.view_models.PhotoViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.SharedFlow
@@ -39,7 +38,7 @@ class SearchFragment : Fragment() {
     private lateinit var adapter: PhotosAdapter
 
     @Inject
-    lateinit var pexelsViewModel: PhotoViewModel
+    lateinit var viewModel: SearchViewModel
 
     private val queryTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(
@@ -58,7 +57,7 @@ class SearchFragment : Fragment() {
         ) {
             val query = charSequence.toString().trim()
             if (query.isNotBlank()) {
-                pexelsViewModel.loadPhotos(query, PHOTOS_PER_PAGE)
+                viewModel.loadPhotos(query, PHOTOS_PER_PAGE)
             }
         }
 
@@ -76,7 +75,7 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.search_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,10 +85,10 @@ class SearchFragment : Fragment() {
         initRecycler()
 
         lifecycleScope.launch {
-            pexelsViewModel.photosFlow.collectToAdapter()
+            viewModel.photosFlow.collectToAdapter()
         }
 
-        pexelsViewModel.loadPhotos(INITIAL_QUERY, PHOTOS_PER_PAGE_INITIAL)
+        viewModel.loadPhotos(INITIAL_QUERY, PHOTOS_PER_PAGE_INITIAL)
     }
 
     private fun initViews(parent: View) {
@@ -99,7 +98,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        adapter = PhotosAdapter(pexelsViewModel::onPhotoClick)
+        adapter = PhotosAdapter(viewModel::onPhotoClick)
         recyclerView.adapter = adapter
         recyclerView.hasFixedSize()
         val orientation = (recyclerView.layoutManager as LinearLayoutManager).orientation

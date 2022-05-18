@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.SearchFragment">
+    tools:context=".presentation.screens.search_photo.SearchFragment">
 
     <EditText
         android:id="@+id/editText"
@@ -13,7 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center_horizontal"
-        android:hint="@string/HintText" />
+        android:hint="@string/HintText"
+        android:importantForAutofill="no"
+        android:inputType="text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

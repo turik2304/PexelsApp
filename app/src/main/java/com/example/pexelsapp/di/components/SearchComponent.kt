@@ -2,7 +2,7 @@ package com.example.pexelsapp.di.components
 
 import com.example.pexelsapp.di.modules.SearchModule
 import com.example.pexelsapp.di.scopes.SearchScope
-import com.example.pexelsapp.presentation.SearchFragment
+import com.example.pexelsapp.presentation.screens.search_photo.SearchFragment
 import dagger.Component
 
 @SearchScope

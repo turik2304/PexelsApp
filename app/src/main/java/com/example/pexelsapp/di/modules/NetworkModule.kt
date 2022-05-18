@@ -1,19 +1,28 @@
 package com.example.pexelsapp.di.modules
 
-import com.example.pexelsapp.di.scopes.AppScope
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
+import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
+import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module
-class OkHttpModule {
+object NetworkModule {
 
     @Provides
-    @AppScope
+    @Singleton
     fun provideOkHttpClient(
         interceptor: Interceptor,
         loggingInterceptor: HttpLoggingInterceptor
@@ -26,7 +35,7 @@ class OkHttpModule {
         .build()
 
     @Provides
-    @AppScope
+    @Singleton
     fun provideInterceptor(): Interceptor = Interceptor { chain ->
         val request: Request = chain.request()
         val authenticatedRequest: Request = request.newBuilder()
@@ -38,8 +47,34 @@ class OkHttpModule {
     }
 
     @Provides
-    @AppScope
+    @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
         setLevel(HttpLoggingInterceptor.Level.BODY)
     }
+
+    @Provides
+    @Singleton
+    fun provideRetrofitClient(
+        okHttpClient: OkHttpClient,
+        @Named("baseURL") baseURL: String,
+        converterFactory: Converter.Factory
+    ): Retrofit =
+        Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(baseURL)
+            .addConverterFactory(converterFactory)
+            .build()
+
+    @Provides
+    @Singleton
+    @Named("baseURL")
+    fun provideBaseURL(): String = "https://api.pexels.com/"
+
+    @Provides
+    @Singleton
+    fun provideConverterFactory(): Converter.Factory = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+    }.asConverterFactory("application/json".toMediaType())
+
 }

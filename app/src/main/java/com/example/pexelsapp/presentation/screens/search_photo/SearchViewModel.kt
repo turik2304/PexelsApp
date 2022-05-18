@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pexelsapp.domain.usecase.GetPhotosUsecase
 import com.example.pexelsapp.presentation.model.PhotoUI
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
@@ -13,6 +14,7 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @FlowPreview
+@HiltViewModel
 class SearchViewModel @Inject constructor(
     private val getPhotosUsecase: GetPhotosUsecase
 ) : ViewModel() {
@@ -25,6 +27,7 @@ class SearchViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             queryFlow
+                .filter { it.query.isNotBlank() }
                 .debounce(700)
                 .distinctUntilChanged()
                 .mapLatest { (query, perPage) ->

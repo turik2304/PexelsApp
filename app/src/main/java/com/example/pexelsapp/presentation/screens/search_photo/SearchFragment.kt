@@ -8,37 +8,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pexelsapp.PexelsApp
 import com.example.pexelsapp.R
 import com.example.pexelsapp.presentation.adapters.PhotosAdapter
 import com.example.pexelsapp.presentation.model.PhotoUI
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @FlowPreview
 @ExperimentalCoroutinesApi
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
 
-    companion object {
-        private const val PHOTOS_PER_PAGE = 20
-        private const val PHOTOS_PER_PAGE_INITIAL = 20
-        private const val INITIAL_QUERY = "hello"
-    }
+    private val viewModel by viewModels<SearchViewModel>()
 
     private lateinit var editText: EditText
+
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var adapter: PhotosAdapter
-
-    @Inject
-    lateinit var viewModel: SearchViewModel
 
     private val queryTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(
@@ -56,18 +51,10 @@ class SearchFragment : Fragment() {
             count: Int
         ) {
             val query = charSequence.toString().trim()
-            if (query.isNotBlank()) {
-                viewModel.loadPhotos(query, PHOTOS_PER_PAGE)
-            }
+            viewModel.loadPhotos(query, PHOTOS_PER_PAGE)
         }
 
-        override fun afterTextChanged(s: Editable?) {
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity?.application as PexelsApp).searchComponent.inject(this)
+        override fun afterTextChanged(s: Editable?) {}
     }
 
     override fun onCreateView(
@@ -80,8 +67,10 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        editText = view.findViewById(R.id.editText)
+        editText.addTextChangedListener(queryTextWatcher)
+        recyclerView = view.findViewById(R.id.recyclerView)
 
-        initViews(view)
         initRecycler()
 
         lifecycleScope.launch {
@@ -89,12 +78,6 @@ class SearchFragment : Fragment() {
         }
 
         viewModel.loadPhotos(INITIAL_QUERY, PHOTOS_PER_PAGE_INITIAL)
-    }
-
-    private fun initViews(parent: View) {
-        editText = parent.findViewById(R.id.editText)
-        editText.addTextChangedListener(queryTextWatcher)
-        recyclerView = parent.findViewById(R.id.recyclerView)
     }
 
     private fun initRecycler() {
@@ -109,5 +92,11 @@ class SearchFragment : Fragment() {
         this.collect {
             adapter.submitList(it)
         }
+    }
+
+    companion object {
+        private const val PHOTOS_PER_PAGE = 20
+        private const val PHOTOS_PER_PAGE_INITIAL = 20
+        private const val INITIAL_QUERY = "hello"
     }
 }

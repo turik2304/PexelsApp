@@ -1,7 +1,7 @@
 package com.example.pexelsapp.data.repository
 
+import com.example.pexelsapp.data.mappers.toDomain
 import com.example.pexelsapp.data.network.PexelsApi
-import com.example.pexelsapp.data.network.responses.PhotosResponse
 import com.example.pexelsapp.domain.model.Photo
 
 class PexelsRepositoryImpl(
@@ -12,13 +12,4 @@ class PexelsRepositoryImpl(
         return api.getPhotos(query, perPage).toDomain()
     }
 
-    private fun PhotosResponse.toDomain(): List<Photo> {
-        return this.photos.map { photoRemote ->
-            Photo(
-                id = photoRemote.id,
-                url = photoRemote.source.url,
-                photographer = photoRemote.photographer
-            )
-        }
-    }
 }

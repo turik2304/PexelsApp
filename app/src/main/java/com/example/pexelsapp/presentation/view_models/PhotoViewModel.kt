@@ -3,8 +3,8 @@ package com.example.pexelsapp.presentation.view_models
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pexelsapp.domain.GetPhotosUsecase
-import com.example.pexelsapp.domain.model.Photo
+import com.example.pexelsapp.domain.usecase.GetPhotosUsecase
+import com.example.pexelsapp.presentation.model.PhotoUI
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
@@ -17,8 +17,8 @@ class PhotoViewModel @Inject constructor(
     private val getPhotosUsecase: GetPhotosUsecase
 ) : ViewModel() {
 
-    private val _photosFlow: MutableSharedFlow<List<Photo>> = MutableSharedFlow()
-    val photosFlow: SharedFlow<List<Photo>> = _photosFlow.asSharedFlow()
+    private val _photosFlow: MutableSharedFlow<List<PhotoUI>> = MutableSharedFlow()
+    val photosFlow: SharedFlow<List<PhotoUI>> = _photosFlow.asSharedFlow()
 
     private val queryFlow: MutableSharedFlow<SearchQuery> = MutableSharedFlow()
 
@@ -42,7 +42,7 @@ class PhotoViewModel @Inject constructor(
         }
     }
 
-    fun onPhotoClick(photo: Photo) {
+    fun onPhotoClick(photo: PhotoUI) {
         Log.d("xxx", "photoClick $photo")
     }
 

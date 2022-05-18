@@ -1,6 +1,6 @@
 package com.example.pexelsapp.data.network
 
-import com.example.pexelsapp.data.network.responses.PhotosResponse
+import com.example.pexelsapp.data.network.model.PhotosResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

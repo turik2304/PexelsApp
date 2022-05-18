@@ -14,13 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pexelsapp.PexelsApp
 import com.example.pexelsapp.R
-import com.example.pexelsapp.domain.model.Photo
 import com.example.pexelsapp.presentation.adapters.PhotosAdapter
+import com.example.pexelsapp.presentation.model.PhotoUI
 import com.example.pexelsapp.presentation.view_models.PhotoViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -107,7 +106,7 @@ class SearchFragment : Fragment() {
         recyclerView.addItemDecoration(DividerItemDecoration(context, orientation))
     }
 
-    private suspend fun SharedFlow<List<Photo>>.collectToAdapter() {
+    private suspend fun SharedFlow<List<PhotoUI>>.collectToAdapter() {
         this.collect {
             adapter.submitList(it)
         }

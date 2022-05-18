@@ -1,4 +1,4 @@
-package com.example.pexelsapp.data.network.responses
+package com.example.pexelsapp.data.network.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

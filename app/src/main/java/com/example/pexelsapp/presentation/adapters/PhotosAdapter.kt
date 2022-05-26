@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.pexelsapp.R
-import com.example.pexelsapp.extensions.loadImageFromUrl
 import com.example.pexelsapp.presentation.model.PhotoUI
 
 class PhotosAdapter(private val onClick: (PhotoUI) -> Unit) :
@@ -33,7 +33,9 @@ class PhotosAdapter(private val onClick: (PhotoUI) -> Unit) :
         fun bind(photo: PhotoUI) {
             currentPhoto = photo
             textViewDescription.text = photo.photographer
-            imageViewPhoto.loadImageFromUrl(photo.url)
+            Glide.with(imageViewPhoto)
+                .load(photo.url)
+                .into(imageViewPhoto)
         }
     }
 

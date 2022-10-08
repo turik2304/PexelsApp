@@ -3,7 +3,7 @@ package com.example.pexelsapp.presentation.screens.search_photo
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pexelsapp.domain.usecase.GetPhotosUsecase
+import com.example.domain.usecase.GetPhotosUsecase
 import com.example.pexelsapp.presentation.model.PhotoUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
